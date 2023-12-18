@@ -1,4 +1,4 @@
-﻿using Dalamud.Game.Command;
+using Dalamud.Game.Command;
 using Dalamud.IoC;
 using Dalamud.Plugin;
 using System.IO;
@@ -10,16 +10,17 @@ namespace SamplePlugin
 {
     public sealed class Plugin : IDalamudPlugin
     {
-        public string Name => "Sample Plugin";
-        private const string CommandName = "/pmycommand";
+        public string Name => "League Combat System";
+        private const string CommandName = "/lcs";
 
         private DalamudPluginInterface PluginInterface { get; init; }
         private ICommandManager CommandManager { get; init; }
         public Configuration Configuration { get; init; }
-        public WindowSystem WindowSystem = new("SamplePlugin");
+        public WindowSystem WindowSystem = new("League Combat System");
 
         private ConfigWindow ConfigWindow { get; init; }
         private MainWindow MainWindow { get; init; }
+        private TalentTree TalentTree { get; init; }
 
         public Plugin(
             [RequiredVersion("1.0")] DalamudPluginInterface pluginInterface,
@@ -35,9 +36,11 @@ namespace SamplePlugin
             var imagePath = Path.Combine(PluginInterface.AssemblyLocation.Directory?.FullName!, "goat.png");
             var goatImage = this.PluginInterface.UiBuilder.LoadImage(imagePath);
 
+            TalentTree = new TalentTree(this);
             ConfigWindow = new ConfigWindow(this);
             MainWindow = new MainWindow(this, goatImage);
-            
+
+            WindowSystem.AddWindow(TalentTree);
             WindowSystem.AddWindow(ConfigWindow);
             WindowSystem.AddWindow(MainWindow);
 
@@ -48,6 +51,7 @@ namespace SamplePlugin
 
             this.PluginInterface.UiBuilder.Draw += DrawUI;
             this.PluginInterface.UiBuilder.OpenConfigUi += DrawConfigUI;
+            this.PluginInterface.UiBuilder.ShowUi += DrawTalentTreeUI;
         }
 
         public void Dispose()
@@ -56,6 +60,7 @@ namespace SamplePlugin
             
             ConfigWindow.Dispose();
             MainWindow.Dispose();
+            TalentTree.Dispose();
             
             this.CommandManager.RemoveHandler(CommandName);
         }
@@ -74,6 +79,11 @@ namespace SamplePlugin
         public void DrawConfigUI()
         {
             ConfigWindow.IsOpen = true;
+        }
+
+        public void DrawTalentTreeUI()
+        {
+            TalentTree.IsOpen = true;
         }
     }
 }

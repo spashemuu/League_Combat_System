@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Numerics;
 using Dalamud.Interface.Internal;
 using Dalamud.Interface.Windowing;
@@ -12,7 +12,7 @@ public class MainWindow : Window, IDisposable
     private Plugin Plugin;
 
     public MainWindow(Plugin plugin, IDalamudTextureWrap goatImage) : base(
-        "My Amazing Window", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse)
+        "LCS Home Screen", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse)
     {
         this.SizeConstraints = new WindowSizeConstraints
         {
@@ -31,11 +31,15 @@ public class MainWindow : Window, IDisposable
 
     public override void Draw()
     {
-        ImGui.Text($"The random config bool is {this.Plugin.Configuration.SomePropertyToBeSavedAndWithADefault}");
+        //ImGui.Text($"The random config bool is {this.Plugin.Configuration.SomePropertyToBeSavedAndWithADefault}");
 
         if (ImGui.Button("Show Settings"))
         {
             this.Plugin.DrawConfigUI();
+        }
+        if (ImGui.Button("Talent Tree"))
+        {
+            this.Plugin.DrawTalentTreeUI();
         }
 
         ImGui.Spacing();
