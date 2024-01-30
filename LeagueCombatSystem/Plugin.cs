@@ -4,9 +4,9 @@ using Dalamud.Plugin;
 using System.IO;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin.Services;
-using SamplePlugin.Windows;
+using LeagueCombatSystem.Windows;
 
-namespace SamplePlugin
+namespace LeagueCombatSystem
 {
     public sealed class Plugin : IDalamudPlugin
     {
@@ -33,8 +33,8 @@ namespace SamplePlugin
             this.Configuration.Initialize(this.PluginInterface);
 
             // you might normally want to embed resources and load them from the manifest stream
-            var imagePath = Path.Combine(PluginInterface.AssemblyLocation.Directory?.FullName!, "goat.png");
-            var goatImage = this.PluginInterface.UiBuilder.LoadImage(imagePath);
+            var goatImagePath = Path.Combine(PluginInterface.AssemblyLocation.Directory?.FullName!, "goat.png");
+            var goatImage = this.PluginInterface.UiBuilder.LoadImage(goatImagePath);
 
             TalentTree = new TalentTree(this);
             ConfigWindow = new ConfigWindow(this);
